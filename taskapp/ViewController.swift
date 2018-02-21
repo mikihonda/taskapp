@@ -10,9 +10,10 @@ import UIKit
 import RealmSwift
 import UserNotifications
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
     
     @IBOutlet weak var tableView: UITableView!
+    // searchBarのoutlet？？
     
     // Realmインスタンスを取得する
     let realm = try! Realm()
@@ -22,12 +23,25 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     // 以降内容をアップデートするとリスト内は自動的に更新される
     var taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: false)
     
+    //サーチバーを作成
+    var searchResults:[String] = []
+    var searchBar = UISearchBar()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
         tableView.delegate = self
         tableView.dataSource = self
+        
+        searchBar = UISearchBar()
+        searchBar.delegate = self
+        searchBar.searchBarStyle = UISearchBarStyle.default
+        searchBar.keyboardType = UIKeyboardType.default
+        searchBar.showsSearchResultButton = false // 検索結果表示ボタン
+        
+        searchBar.placeholder = "カテゴリ名を入力してください"
+        searchBar.tintColor = UIColor.red
     }
 
     override func didReceiveMemoryWarning() {
@@ -105,7 +119,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         if segue.identifier == "cellSegue" {
             
             let indexPath = self.tableView.indexPathForSelectedRow
-            inputViewController.task = taskArray[indexPath!.row]
+            inputViewController.task = taskArray[indexPath!.row]        
             
         } else {
             
