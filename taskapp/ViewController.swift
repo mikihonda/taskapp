@@ -13,8 +13,7 @@ import UserNotifications
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
     
     @IBOutlet weak var tableView: UITableView!
-    // searchBarのoutlet？？
-    
+    @IBOutlet weak var searchBarItem: UISearchBar!
     // Realmインスタンスを取得する
     let realm = try! Realm()
     
@@ -38,7 +37,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         searchBar.delegate = self
         searchBar.searchBarStyle = UISearchBarStyle.default
         searchBar.keyboardType = UIKeyboardType.default
-        searchBar.showsSearchResultButton = false // 検索結果表示ボタン
+        searchBar.showsSearchResultsButton = false // 検索結果表示ボタン
         
         searchBar.placeholder = "カテゴリ名を入力してください"
         searchBar.tintColor = UIColor.red
