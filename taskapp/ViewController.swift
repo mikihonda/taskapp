@@ -22,6 +22,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     // 以降内容をアップデートするとリスト内は自動的に更新される
     var taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: false)
     
+    // サーチバーで検索するカテゴリーの定義？？
+    // var categories =
+    
     //サーチバーを作成
     var searchResults:[String] = []
     var searchBar = UISearchBar()
@@ -109,6 +112,29 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 }
             }
         }
+    }
+    
+    // 検索ボタン押した時の呼び出しメソッド
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBarItem.endEditing(true)
+        
+        // 検索文字列を空にする
+        searchResults.removeAll()
+        
+        if(searchBar.text == "") {
+            // 検索文字列が空の場合は、全てを表示する
+            searchResults = categories
+        } else {
+            // 検索文字列を含むデータを検索結果配列に追加する
+            for data in categories {
+                if data.containsString(SearchBarItem.text!) {
+                    searchResults.append(data)
+                }
+            }
+        }
+        
+        // テーブルを再読み込みする
+        tableView.reloadData()
     }
     
     // segue で画面遷移する時に呼ばれる
