@@ -115,15 +115,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
         if !searchText.isEmpty {
             // 絞り込みを行う
-            let category = Task.category
-            for data in category {
-                if data.containsString(searchText) {
-                    taskArray.append(data)
-                }
-            }
+            // NSPredicateを使って検索条件を指定します
+            let predicate = NSPredicate(format: "category BEGINSWITH %@", searchText)
+            taskArray = realm.objects(Task.self).filter(predicate)
+
         } else {
             // 全件表示に戻す
-            return taskArray.All
+            taskArray = realm.objects(Task.self)
         }
         self.tableView.reloadData()
     }
