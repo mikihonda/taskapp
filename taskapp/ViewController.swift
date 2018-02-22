@@ -23,7 +23,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: false)
     
     //サーチバーを作成
-    var searchResults:[String] = []
+//    var searchResults:[String] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +32,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.delegate = self
         tableView.dataSource = self
         
-        searchBarItem = UISearchBar()
         searchBarItem.delegate = self
         searchBarItem.searchBarStyle = UISearchBarStyle.default
         searchBarItem.keyboardType = UIKeyboardType.default
@@ -62,7 +61,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         // Cellに値を設定する
         let task = taskArray[indexPath.row]
         cell.textLabel?.text = task.title
-        cell.textLabel?.text = task.category
         
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm"
@@ -112,30 +110,24 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
     }
     
-    // 検索ボタン押した時の呼び出しメソッド
-//    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-//        // キーボードを閉じる
-//        searchBarItem.endEditing(true)
-//
-//        // 検索文字列を空にする
-//        searchResults.removeAll()
-//
-//        if(searchBar.text == "") {
-//            // 検索文字列が空の場合は、全てを表示する
-//            searchResults = task.category
-//        } else {
-//            // 検索文字列を含むデータを検索結果配列に追加する
-//            for data in category {
-//                if data.containsString(SearchBarItem.text!) {
-//                    searchResults.append(data)
-//                }
-//            }
-//        }
-//
-//        // テーブルを再読み込みする
-//        self.tableView.reloadData()
-//    }
-//
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        print("searchText: \(searchText)")
+
+        if !searchText.isEmpty {
+            // 絞り込みを行う
+            let category = Task.category
+            for data in category {
+                if data.containsString(searchText) {
+                    taskArray.append(data)
+                }
+            }
+        } else {
+            // 全件表示に戻す
+            return taskArray.All
+        }
+        self.tableView.reloadData()
+    }
+
     // segue で画面遷移する時に呼ばれる
     override func prepare(for segue: UIStoryboardSegue, sender: Any?){
         let inputViewController:InputViewController = segue.destination as! InputViewController
